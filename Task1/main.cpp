@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cmath>
 #include <windows.h>
+#include <vector>
+
+
 // Определяем нашу функцию f(x)
 double f(double x) {
     return x*x*x-3*x-5;
@@ -8,16 +11,13 @@ double f(double x) {
     // Пример: return x*x - 4; для уравнения x^2 = 4
 }
 
+
+
 // Метод половинного деления для отделения корней
 double bisection(double A, double B, double epsilon) {
     double a = A;
     double b = B;
     double c;
-
-    if (f(a) * f(b) >= 0) {
-        std::cout << "Не удовлетворяет условию: f(a) * f(b) должно быть < 0" << std::endl;
-        return 0.0; // Возвращаем ноль, чтобы показать ошибку
-    }
 
     while ((b - a) >= epsilon) {
         c = (a + b) / 2;
@@ -46,33 +46,50 @@ double newton(double x0, double epsilon, int max_iterations) {
     return 0.0; // Возвращаем ноль, чтобы показать ошибку
 }
 
-int main() {
-    double A, B;
-    double epsilon = 0.0001; // Точность
-    int max_iterations = 100; // Максимальное количество итераций для метода Ньютона
+void solutionMethod(double start, double end){
+    double x_0 = start + end / 2;
+    double root1 = bisection(start, end, 0.0001);
+    double root2 = newton(x_0, 0.0001, 100);
+    std::cout<<"Корень по методу бисекции: "<< root1<<"\n";
+    std::cout<<"Корень по методу Ньютона: "<<root2<<"\n";
+}
 
+void rootsSeparation(double A, double B, double h ){
+    bool check = false;
+    for(double i  = A; i <= B; i += h){
+        if( f(i) * f(i + h) < 0){
+            std::cout<<"Отрезок содержаший корень нечтной кратности : ["<< i << ", "<< i+h<<"]" <<"\n";
+            solutionMethod(i, i+h);
+            check = true;
+        }
+    }
+    if (!check){
+        std::cout<<"Корень не найден";
+    }
+}
+
+int main() {
+    double A, B, h;
+//    double epsilon = 0.0001; // Точность
+//    int max_iterations = 100; // Максимальное количество итераций для метода Ньютона
+    int N;
     // Задаем интервал [A, B]
     std::cout<<"Введите начало интервала: ";
     std::cin>>A; // Задайте начало интервала
     std::cout<<"Введите конец интервала: ";
     std::cin>>B;// Задайте конец интервала
+    std::cout<<"Введите N: ";
+    std::cin>>N;
+    h = (B - A) / N;
+    std::cout<<"Длина разбиения h = "<< h;
     std::cout<<"\n";
     // Отделение корней
-    double root = bisection(A, B, epsilon);
+    rootsSeparation(A, B, h);
+    //double root = bisection(A, B, epsilon);
 
-    std::cout<<"Неуточненный: "<<root<<"\n";
+    //std::cout<<"Неуточненный: "<<root<<"\n";
 
-    if (root != 0.0) {
-        // Уточнение корней методом Ньютона
-        double refined_root = newton(root, epsilon, max_iterations);
-        std::cout << "Корень уточненный: " << refined_root << std::endl;
 
-        // Дополнительный контроль и анализ результатов, если необходимо
-        // ...
-
-    } else {
-        std::cout << "Корень не найден на заданном интервале." << std::endl;
-    }
 
     return 0;
 }
