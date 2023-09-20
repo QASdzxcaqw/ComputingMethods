@@ -4,6 +4,7 @@
 namespace task_1 {
 
     constexpr double epsilon = 1.0e-10; // 1 * 10^{-10}
+    constexpr int max_iter_count = 100;
 
     struct founded_root {
         double root;
@@ -54,10 +55,10 @@ namespace task_1 {
     }
 
 // Метод Ньютона для уточнения корней
-    void newton(double x0, int max_iterations, founded_root &potential_root) {
+    void newton(double x0, founded_root &potential_root) {
         double x = x0;
         double x_past = x0;
-        for (int i = 0; i < max_iterations; i++) {
+        for (int i = 0; i < max_iter_count; i++) {
             x = x - f(x) / fp(x);
             if (std::abs(x - x_past) < epsilon) {
                 potential_root.root = x;
@@ -71,11 +72,11 @@ namespace task_1 {
     }
 
 // Модифицированный метод Ньютона для уточнения корней
-    void modified_newton(double x0, int max_iterations, founded_root &potential_root) {
+    void modified_newton(double x0, founded_root &potential_root) {
         double x = x0;
         double x_past = x0;
         double fpx0 = fp(x0);
-        for (int i = 0; i < max_iterations; i++) {
+        for (int i = 0; i < max_iter_count; i++) {
             double fx = f(x);
             x = x - fx / fpx0;
             if (std::abs(x - x_past) < epsilon) {
@@ -92,7 +93,7 @@ namespace task_1 {
     void secant(double A, double B, founded_root &potential_root) {
         double xkmin1 = A;
         double xk = B;
-        double xkplus1 = 1;
+        double xkplus1 = 0;
         potential_root.count_of_iter = 0;
 
         while (std::abs(xk - xkmin1) >= epsilon) {
@@ -117,11 +118,11 @@ namespace task_1 {
         std::cout << "Бисекция: ";
         root.print_info();
 
-        newton(x_0, 100, root);
+        newton(x_0, root);
         std::cout << "Ньютон: ";
         root.print_info();
 
-        modified_newton(x_0, 100, root);
+        modified_newton(x_0, root);
         std::cout << "Модифицированны Ньютон: ";
         root.print_info();
 
@@ -151,7 +152,6 @@ namespace task_1 {
 
 int main() {
     double A, B, h;
-//    int max_iterations = 100; // Максимальное количество итераций для метода Ньютона
     int N;
 
     std::cout << "Задача - отыскание корней нечётной кратности нелинейного уравнения \n\n";
