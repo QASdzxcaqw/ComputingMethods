@@ -13,10 +13,10 @@ namespace task_1 {
 
         void print_info() const {
             if (count_of_iter != -1) {
-                std::cout << "корень " << root << " найден за " << count_of_iter << " итераций, модуль невязки "
+                std::cout << "Корень " << root << " найден за " << count_of_iter << " итераций, модуль невязки "
                           << nev_abs << '\n';
             } else {
-                std::cout << "не удалось найти корень" << '\n';
+                std::cout << "Не удалось найти корень" << '\n';
             }
 
         }
@@ -123,7 +123,7 @@ namespace task_1 {
         root.print_info();
 
         modified_newton(x_0, root);
-        std::cout << "Модифицированны Ньютон: ";
+        std::cout << "Модифицированный Ньютон: ";
         root.print_info();
 
         secant(start, end, root);
@@ -154,7 +154,7 @@ int main() {
     double A, B, h;
     int N;
 
-    std::cout << "Задача - отыскание корней нечётной кратности нелинейного уравнения \n\n";
+    std::cout << "Задача - поиск корней нечётной кратности нелинейного уравнения \n\n";
     // Задаем интервал [A, B]
     std::cout << "Введите начало интервала: ";
     std::cin >> A; // Задайте начало интервала
