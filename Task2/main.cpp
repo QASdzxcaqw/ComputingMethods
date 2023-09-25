@@ -1,28 +1,35 @@
 #include <iostream>
-#include <math.h>
 #include <vector>
 #include <cmath>
 #include <algorithm>
 int m, n;
-static double a, b, x0;
+double a, b, x0;
 
 
 double f(double x){
     return cos(x) + 2*x;
-};
+}
+
+bool compareByDifference(double target, const std::pair<double, double>& target1, const std::pair<double, double>& target2) {
+    return std::abs(target1.first - target) < std::abs(target2.first - target);
+}
 
 void fillTable(std::vector<double>& table_x, std::vector<double>& table_y){
     for (int i = 0; i <= m; i++) {
         table_x[i] = a + i * (b - a) / m;
         table_y[i] = f(a + i * (b - a) / m);
     }
-};
+}
 
-void sortTableByProximity(std::vector<std::pair<double, double>>& sorted_table, const std::vector<double>& table_x, const std::vector<double>& table_y) {
+void sortTableByProximity(std::vector<std::pair<double, double>>& sorted_table,  std::vector<double>& table_x,  std::vector<double>& table_y) {
     for (int i = 0; i <= m; i++) {
-        sorted_table.push_back({std::abs(table_x[i] - x0), table_y[i]});
+        sorted_table[i].first = table_x[i];
+        sorted_table[i].second = table_y[i];
     }
-    std::sort(sorted_table.begin(), sorted_table.end());
+    std::sort(sorted_table.begin(), sorted_table.end(), [&](const std::pair<double, double>& target1, const std::pair<double, double>& target2) {
+        return compareByDifference(x0, target1, target2);
+    });
+
 }
 
 
@@ -59,7 +66,7 @@ int main() {
     // Вывод результатов
     std::cout << "Отсортированная таблица (или набор узлов, ближайших к точке x):" << std::endl;
     for (int i = 0; i <= n; i++) {
-        std::cout << "x[" << i << "] = " << sorted_table[i].second << ", y[" << i << "] = " << sorted_table[i].second << std::endl;
+        std::cout << "x[" << i << "] = " << sorted_table[i].first << ", y[" << i << "] = " << sorted_table[i].second << std::endl;
     }
     return 0;
 }
