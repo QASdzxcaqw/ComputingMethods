@@ -3,18 +3,18 @@
 
 namespace task_1 {
 
-    constexpr double epsilon = 1.0e-10; // 1 * 10^{-10}
+    constexpr double epsilon = 1.0e-6; // 1 * 10^{-6}
     constexpr int max_iter_count = 100;
 
     struct founded_root {
         double root;
         double nev_abs;
         int count_of_iter;
-
+        double module;
         void print_info() const {
             if (count_of_iter != -1) {
                 std::cout << "Корень " << root << " найден за " << count_of_iter << " итераций, модуль невязки "
-                          << nev_abs << '\n';
+                          << nev_abs << ", |x_m - x_(m-1)| = "<< module<<'\n';
             } else {
                 std::cout << "Не удалось найти корень" << '\n';
             }
@@ -49,7 +49,7 @@ namespace task_1 {
                 a = c;
             }
         }
-
+        potential_root.module = std::abs(b-a);
         potential_root.root = (a + b) / 2;
         potential_root.nev_abs = std::abs(f(c));
     }
@@ -61,6 +61,7 @@ namespace task_1 {
         for (int i = 0; i < max_iter_count; i++) {
             x = x - f(x) / fp(x);
             if (std::abs(x - x_past) < epsilon) {
+                potential_root.module = std::abs(x - x_past);
                 potential_root.root = x;
                 potential_root.nev_abs = std::abs(f(x));
                 potential_root.count_of_iter = i;
@@ -80,6 +81,7 @@ namespace task_1 {
             double fx = f(x);
             x = x - fx / fpx0;
             if (std::abs(x - x_past) < epsilon) {
+                potential_root.module = std::abs(x - x_past);
                 potential_root.root = x;
                 potential_root.nev_abs = std::abs(f(x));
                 return; // Найден корень
@@ -102,6 +104,7 @@ namespace task_1 {
             xk = xkplus1;
             ++potential_root.count_of_iter;
         }
+        potential_root.module = std::abs(xkplus1 - xkmin1);
         potential_root.root = xkplus1;
         potential_root.nev_abs = std::abs(f(xkplus1));
     }
