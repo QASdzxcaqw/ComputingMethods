@@ -15,7 +15,7 @@ function integrateUsingQuadrature(a, b, n, quadratureFunction) {
         sum += quadratureFunction(xi, h);
     }
 
-    return sum;
+    return sum*h;
 }
 
 function leftRectangle(xi, h) {
@@ -46,7 +46,7 @@ function calculateIntegral() {
     const a = parseFloat(document.getElementById('lowerLimit').value);
     const b = parseFloat(document.getElementById('upperLimit').value);
     const n = parseInt(document.getElementById('intervals').value);
-
+    
     const exactValue = exactIntegral(a, b);
 
     const output = document.getElementById('output');

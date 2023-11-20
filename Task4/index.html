@@ -10,13 +10,13 @@
     <h1>Вычисление определенного интеграла</h1>
     <form id="integrationForm">
         <label for="lowerLimit">Нижний предел интегрирования:</label>
-        <input type="number" id="lowerLimit" required step="any">
+        <input type="number" placeholder="Введите нижний предел" id="lowerLimit" required step="any">
 
         <label for="upperLimit">Верхний предел интегрирования:</label>
-        <input type="number" id="upperLimit" required step="any">
+        <input type="number" placeholder="Введите верхний предел" id="upperLimit" required step="any">
 
         <label for="intervals">Количество интервалов (n):</label>
-        <input type="number" id="intervals" required>
+        <input type="number" placeholder="Введите интервал" id="intervals" required>
 
         <button type="button" onclick="calculateIntegral()">Вычислить</button>
     </form>

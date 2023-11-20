@@ -2,8 +2,16 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
     margin: 20px;
+    display: block;
 }
 
 #output {
     margin-top: 20px;
+}
+button:hover{
+    background-color: cyan;
+    color:#ffffff;
+}
+button{
+    cursor: pointer;
 }
