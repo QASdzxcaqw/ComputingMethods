@@ -42,6 +42,28 @@ function threeEighths(xi, h) {
     return (f(xi) + 3 * f(xi + h / 3) + 3 * f(xi + 2 * h / 3) + f(xi + h)) / 8;
 }
 
+isOn = false;
+
+function addDelMultiplier(){
+    
+    if(isOn == false){
+        const butt = document.getElementById('mult');
+        butt.innerText = "Удалить множитель";
+        const output = document.getElementById('integrationForm');
+        output.innerHTML += `<label for="multiplier" ">Множитель интервалов (l): </label>`;
+        output.innerHTML += `<input type="number" placeholder="Введите множитель" id="multiplier" required step="any"><br><br>`;
+        isOn = true;
+    }else{
+        const butt = document.getElementById('mult');
+        butt.innerText = "Добавить множитель";
+        document.getElementById('multText').remove();
+        document.getElementById('multiplier').remove();
+    
+        isOn = false;
+    }
+    
+}
+
 function calculateIntegral() {
     const a = parseFloat(document.getElementById('lowerLimit').value);
     const b = parseFloat(document.getElementById('upperLimit').value);
@@ -57,12 +79,12 @@ function calculateIntegral() {
     output.innerHTML += `<p>Средний прямоугольник: ${integrateUsingQuadrature(a, b, n, midRectangle)}</p>`;
     output.innerHTML += `<p>Трапеция: ${integrateUsingQuadrature(a, b, n, trapezoid)}</p>`;
     output.innerHTML += `<p>Симпсон: ${integrateUsingQuadrature(a, b, n, simpson)}</p>`;
-    output.innerHTML += `<p>3/8: ${integrateUsingQuadrature(a, b, n, threeEighths)}</p>`;
+    if (n == 1){output.innerHTML += `<p>3/8: ${integrateUsingQuadrature(a, b, n, threeEighths)}</p>`;}
 
     output.innerHTML += `<p>Погрешность левого прямоугольника: ${Math.abs(integrateUsingQuadrature(a, b, n, leftRectangle) - exactValue)}</p>`;
     output.innerHTML += `<p>Погрешность правого прямоугольника: ${Math.abs(integrateUsingQuadrature(a, b, n, rightRectangle) - exactValue)}</p>`;
     output.innerHTML += `<p>Погрешность среднего прямоугольника: ${Math.abs(integrateUsingQuadrature(a, b, n, midRectangle) - exactValue)}</p>`;
     output.innerHTML += `<p>Погрешность трапеции: ${Math.abs(integrateUsingQuadrature(a, b, n, trapezoid) - exactValue)}</p>`;
     output.innerHTML += `<p>Погрешность Симпсона: ${Math.abs(integrateUsingQuadrature(a, b, n, simpson) - exactValue)}</p>`;
-    output.innerHTML += `<p>Погрешность 3/8: ${Math.abs(integrateUsingQuadrature(a, b, n, threeEighths) - exactValue)}</p>`;
+    if (n ==1){output.innerHTML += `<p>Погрешность 3/8: ${Math.abs(integrateUsingQuadrature(a, b, n, threeEighths) - exactValue)}</p>`;}
 }

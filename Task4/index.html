@@ -7,19 +7,21 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Вычисление определенного интеграла</h1>
+    <h1>Приближённое вычисление интеграла по составным квадратурным формулам</h1>
     <form id="integrationForm">
         <label for="lowerLimit">Нижний предел интегрирования:</label>
-        <input type="number" placeholder="Введите нижний предел" id="lowerLimit" required step="any">
+        <input type="number" placeholder="Введите нижний предел" id="lowerLimit" required step="any"><br><br>
 
         <label for="upperLimit">Верхний предел интегрирования:</label>
-        <input type="number" placeholder="Введите верхний предел" id="upperLimit" required step="any">
+        <input type="number" placeholder="Введите верхний предел" id="upperLimit" required step="any"><br><br>
 
-        <label for="intervals">Количество интервалов (n):</label>
-        <input type="number" placeholder="Введите интервал" id="intervals" required>
+        <label for="intervals">Количество интервалов (m):</label>
+        <input type="number" placeholder="Введите интервал" id="intervals" required><br><br>
 
-        <button type="button" onclick="calculateIntegral()">Вычислить</button>
+        
     </form>
+    <button type="button" id="mult" onclick="addDelMultiplier()">Добавить множитель</button>
+    <button type="button" onclick="calculateIntegral()">Вычислить</button>
 
     <div id="output"></div>
 

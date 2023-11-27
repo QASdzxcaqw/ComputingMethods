@@ -1,11 +1,11 @@
 body {
     font-family: Arial, sans-serif;
-    text-align: center;
     margin: 20px;
     display: block;
 }
 
 #output {
+    font-weight: 700;
     margin-top: 20px;
 }
 button:hover{
@@ -13,5 +13,6 @@ button:hover{
     color:#ffffff;
 }
 button{
+    text-align: right;
     cursor: pointer;
 }
