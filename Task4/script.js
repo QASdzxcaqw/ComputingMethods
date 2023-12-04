@@ -42,37 +42,31 @@ function threeEighths(xi, h) {
     return (f(xi) + 3 * f(xi + h / 3) + 3 * f(xi + 2 * h / 3) + f(xi + h)) / 8;
 }
 
-isOn = false;
 
-function addDelMultiplier(){
-    
-    if(isOn == false){
-        const butt = document.getElementById('mult');
-        butt.innerText = "Удалить множитель";
-        const output = document.getElementById('integrationForm');
-        output.innerHTML += `<label for="multiplier" ">Множитель интервалов (l): </label>`;
-        output.innerHTML += `<input type="number" placeholder="Введите множитель" id="multiplier" required step="any"><br><br>`;
-        isOn = true;
-    }else{
-        const butt = document.getElementById('mult');
-        butt.innerText = "Добавить множитель";
-        document.getElementById('multText').remove();
-        document.getElementById('multiplier').remove();
-    
-        isOn = false;
-    }
-    
-}
 
 function calculateIntegral() {
     const a = parseFloat(document.getElementById('lowerLimit').value);
     const b = parseFloat(document.getElementById('upperLimit').value);
-    const n = parseInt(document.getElementById('intervals').value);
+    n = parseInt(document.getElementById('intervals').value);
+    l = parseInt(document.getElementById('multiplier').value);
+    if(isNaN(a) || isNaN(b)){
+        return;
+    }
+    if(isNaN(n) || l <= 0){
+        n = 1;
+        l = 1;
+    }
+    else if(isNaN(l)){
+        l = 1;
+    }else{
+        n *= l;
+    }
     
     const exactValue = exactIntegral(a, b);
 
     const output = document.getElementById('output');
-    output.innerHTML = `<p>Точное значение интеграла: ${exactValue}</p>`;
+    output.innerHTML = `<p>Итоговое значение n: ${n}</p>`;
+    output.innerHTML += `<p>Точное значение интеграла: ${exactValue}</p>`;
 
     output.innerHTML += `<p>Левый прямоугольник: ${integrateUsingQuadrature(a, b, n, leftRectangle)}</p>`;
     output.innerHTML += `<p>Правый прямоугольник: ${integrateUsingQuadrature(a, b, n, rightRectangle)}</p>`;

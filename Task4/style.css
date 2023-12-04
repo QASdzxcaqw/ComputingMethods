@@ -5,7 +5,9 @@ body {
 }
 
 #output {
-    font-weight: 700;
+    text-align: center;
+    font-size: larger;
+    /* font-weight: 700; */
     margin-top: 20px;
 }
 button:hover{
