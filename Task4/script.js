@@ -43,12 +43,13 @@ function threeEighths(xi, h) {
 }
 
 
+document.getElementById('createTableBtn').addEventListener('click', function () {
 
-function calculateIntegral() {
     const a = parseFloat(document.getElementById('lowerLimit').value);
     const b = parseFloat(document.getElementById('upperLimit').value);
     n = parseInt(document.getElementById('intervals').value);
     l = parseInt(document.getElementById('multiplier').value);
+
     if(isNaN(a) || isNaN(b)){
         return;
     }
@@ -61,24 +62,62 @@ function calculateIntegral() {
     }else{
         n *= l;
     }
-    
+    let colums = 7
+    if(n == 1){
+        colums = 8;
+    }
+
     const exactValue = exactIntegral(a, b);
 
-    const output = document.getElementById('output');
-    output.innerHTML = `<p>Итоговое значение n: ${n}</p>`;
-    output.innerHTML += `<p>Точное значение интеграла: ${exactValue}</p>`;
+    var values = [[n, exactValue, integrateUsingQuadrature(a, b, n, leftRectangle), integrateUsingQuadrature(a, b, n, rightRectangle), integrateUsingQuadrature(a, b, n, midRectangle), 
+        integrateUsingQuadrature(a, b, n, trapezoid), integrateUsingQuadrature(a, b, n, simpson), integrateUsingQuadrature(a, b, n, threeEighths)],
+        ['', 0, Math.abs(integrateUsingQuadrature(a, b, n, leftRectangle) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, rightRectangle) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, midRectangle) - exactValue),
+         Math.abs(integrateUsingQuadrature(a, b, n, trapezoid) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, simpson) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, threeEighths) - exactValue)]]
 
-    output.innerHTML += `<p>Левый прямоугольник: ${integrateUsingQuadrature(a, b, n, leftRectangle)}</p>`;
-    output.innerHTML += `<p>Правый прямоугольник: ${integrateUsingQuadrature(a, b, n, rightRectangle)}</p>`;
-    output.innerHTML += `<p>Средний прямоугольник: ${integrateUsingQuadrature(a, b, n, midRectangle)}</p>`;
-    output.innerHTML += `<p>Трапеция: ${integrateUsingQuadrature(a, b, n, trapezoid)}</p>`;
-    output.innerHTML += `<p>Симпсон: ${integrateUsingQuadrature(a, b, n, simpson)}</p>`;
-    if (n == 1){output.innerHTML += `<p>3/8: ${integrateUsingQuadrature(a, b, n, threeEighths)}</p>`;}
+    // Создаем элемент таблицы
+    var table = document.createElement('table');
+    table.classList.add('table');
+    
+    var rows = ['Точное значение', 'Погрешность']
+    
+    var tbody = document.createElement('tbody');
+    for (var i = 1; i <= 2; i++) {
+        var row = document.createElement('tr');
+        
+        var thRow = document.createElement('th');
+        thRow.scope = 'row';
+        thRow.textContent = rows[i-1];
+        row.appendChild(thRow);
 
-    output.innerHTML += `<p>Погрешность левого прямоугольника: ${Math.abs(integrateUsingQuadrature(a, b, n, leftRectangle) - exactValue)}</p>`;
-    output.innerHTML += `<p>Погрешность правого прямоугольника: ${Math.abs(integrateUsingQuadrature(a, b, n, rightRectangle) - exactValue)}</p>`;
-    output.innerHTML += `<p>Погрешность среднего прямоугольника: ${Math.abs(integrateUsingQuadrature(a, b, n, midRectangle) - exactValue)}</p>`;
-    output.innerHTML += `<p>Погрешность трапеции: ${Math.abs(integrateUsingQuadrature(a, b, n, trapezoid) - exactValue)}</p>`;
-    output.innerHTML += `<p>Погрешность Симпсона: ${Math.abs(integrateUsingQuadrature(a, b, n, simpson) - exactValue)}</p>`;
-    if (n ==1){output.innerHTML += `<p>Погрешность 3/8: ${Math.abs(integrateUsingQuadrature(a, b, n, threeEighths) - exactValue)}</p>`;}
-}
+        for (var j = 1; j <= colums; j++) {
+            var td = document.createElement('td');
+            td.textContent = values[i-1][j-1];
+            row.appendChild(td);
+        }
+        tbody.appendChild(row);
+    }
+    table.appendChild(tbody);
+
+    // Создаем строку заголовка
+    var thead = document.createElement('thead');
+    var headerRow = document.createElement('tr');
+    var headers = ['','Итоговое значение n', 'Точное значение интеграла', 'Левый прямоугольник', 'Правый прямоугольник', 'Средний прямоугольник', 'Трапеция', 'Симпсон', '3/8'];
+
+    if(n != 1){
+        headers.pop();
+    }
+    
+    headers.forEach(function (headerText) {
+      var th = document.createElement('th');
+      th.textContent = headerText;
+      headerRow.appendChild(th);
+    });
+  
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+  
+    // Очищаем содержимое контейнера и добавляем таблицу
+    var tableContainer = document.getElementById('tableContainer');
+    tableContainer.innerHTML = '';
+    tableContainer.appendChild(table);
+  });

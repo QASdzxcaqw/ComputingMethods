@@ -4,17 +4,9 @@ body {
     display: block;
 }
 
-#output {
+.container mt-4{
     text-align: center;
-    font-size: larger;
     /* font-weight: 700; */
     margin-top: 20px;
 }
-button:hover{
-    background-color: cyan;
-    color:#ffffff;
-}
-button{
-    text-align: right;
-    cursor: pointer;
-}
+
