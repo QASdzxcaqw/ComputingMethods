@@ -9,10 +9,18 @@
     <title>Вычисление интеграла</title>
     
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.7.2/math.min.js"></script>
+    
 </head>
 <body>
     <h1>Приближённое вычисление интеграла по составным квадратурным формулам</h1><br><br>
     <form = "integrationForm">
+        <div class="mb-3">
+            <label for="func" class="form-label">Введите функцию: </label>
+            <input type="text" class="form-control" id="func" aria-describedby="functionHelp">
+            <div id="functionHelp" class="form-text">Соблюдайте формат</div>
+        </div>
         <div class="mb-3">
           <label for="lowerLimit" class="form-label">Нижний предел интегрирования:</label>
           <input type="number" class="form-control" id="lowerLimit" aria-describedby="lowerLimitHelp">

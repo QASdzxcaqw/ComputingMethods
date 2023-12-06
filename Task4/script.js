@@ -1,49 +1,71 @@
-function f(x) {
-    return x * x;
+// function f(x) {
+//     return x * x;
+//3x^2+2x+2
+// }
+
+function integral(k){
+    return 3 * k * k + 2 * k + 2;
 }
 
 function exactIntegral(a, b) {
-    return (b ** 3 - a ** 3) / 3;
+    return (integral(b) - integral(a));
 }
 
-function integrateUsingQuadrature(a, b, n, quadratureFunction) {
+function integrateUsingQuadrature(a, b, n, quadratureFunction, f) {
     const h = (b - a) / n;
     let sum = 0;
 
     for (let i = 0; i < n; i++) {
         const xi = a + i * h;
-        sum += quadratureFunction(xi, h);
+        sum += quadratureFunction(xi, h, f);
     }
 
     return sum*h;
 }
 
-function leftRectangle(xi, h) {
+function leftRectangle(xi, h, f) {
     return f(xi);
 }
 
-function rightRectangle(xi, h) {
+function rightRectangle(xi, h, f) {
     return f(xi + h);
 }
 
-function midRectangle(xi, h) {
+function midRectangle(xi, h, f) {
     return f(xi + h / 2);
 }
 
-function trapezoid(xi, h) {
+function trapezoid(xi, h, f) {
     return (f(xi) + f(xi + h)) / 2;
 }
 
-function simpson(xi, h) {
+function simpson(xi, h, f) {
     return (f(xi) + 4 * f(xi + h / 2) + f(xi + h)) / 6;
 }
 
-function threeEighths(xi, h) {
+function threeEighths(xi, h, f) {
+    
     return (f(xi) + 3 * f(xi + h / 3) + 3 * f(xi + 2 * h / 3) + f(xi + h)) / 8;
 }
 
+function runge(val1, val2, d, l){
+    //left right 0, mid trap = 1, simps = 3
+    let mult = (l^(d+1)* val1- val2)/(l^(d+1)-1);
+    return mult;
+}
+
+
 
 document.getElementById('createTableBtn').addEventListener('click', function () {
+    
+    var userInput = document.getElementById('func').value;
+    var func = new Function('x', 'return ' + userInput);
+
+    // const f = '2 * x^2 + 3 * x';
+    // const res = math.evaluate('integral(${fu}, x, 0, 1)');
+
+    //var integ = new Function('x', 'return ' + expr);
+
 
     const a = parseFloat(document.getElementById('lowerLimit').value);
     const b = parseFloat(document.getElementById('upperLimit').value);
@@ -69,11 +91,11 @@ document.getElementById('createTableBtn').addEventListener('click', function () 
 
     const exactValue = exactIntegral(a, b);
 
-    var values = [[n, exactValue, integrateUsingQuadrature(a, b, n, leftRectangle), integrateUsingQuadrature(a, b, n, rightRectangle), integrateUsingQuadrature(a, b, n, midRectangle), 
-        integrateUsingQuadrature(a, b, n, trapezoid), integrateUsingQuadrature(a, b, n, simpson), integrateUsingQuadrature(a, b, n, threeEighths)],
-        ['', 0, Math.abs(integrateUsingQuadrature(a, b, n, leftRectangle) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, rightRectangle) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, midRectangle) - exactValue),
-         Math.abs(integrateUsingQuadrature(a, b, n, trapezoid) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, simpson) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, threeEighths) - exactValue)]]
-
+    var values = [[n, exactValue, integrateUsingQuadrature(a, b, n, leftRectangle, func), integrateUsingQuadrature(a, b, n, rightRectangle, func), integrateUsingQuadrature(a, b, n, midRectangle, func), 
+        integrateUsingQuadrature(a, b, n, trapezoid, func), integrateUsingQuadrature(a, b, n, simpson, func), integrateUsingQuadrature(a, b, n, threeEighths, func)],
+        ['', 0, Math.abs(integrateUsingQuadrature(a, b, n, leftRectangle, func) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, rightRectangle, func) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, midRectangle, func) - exactValue),
+         Math.abs(integrateUsingQuadrature(a, b, n, trapezoid, func) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, simpson, func) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, threeEighths, func) - exactValue)]]
+    
     // Создаем элемент таблицы
     var table = document.createElement('table');
     table.classList.add('table');
