@@ -4,7 +4,7 @@
 // }
 
 function integral(k){
-    return 3 * k * k + 2 * k + 2;
+    return k * k * k + 2 * k * k + 7 * k;
 }
 
 function exactIntegral(a, b) {
@@ -53,6 +53,16 @@ function runge(val1, val2, d, l){
     let mult = (l^(d+1)* val1- val2)/(l^(d+1)-1);
     return mult;
 }
+function fillArray(a, b, n, func, arr){
+    
+    let quadFuncs = [leftRectangle, rightRectangle, midRectangle, trapezoid, simpson, threeEighths]
+    for(let i = 0; i < quadFuncs.length; i++){
+        arr[0].push(integrateUsingQuadrature(a, b, n, quadFuncs[i], func));
+    }
+    for(let j = 0; j < quadFuncs.length; j++){
+        arr[1].push(Math.abs(arr[0][j + 2] - arr[0][1]));
+    }
+}
 
 
 
@@ -75,6 +85,9 @@ document.getElementById('createTableBtn').addEventListener('click', function () 
     if(isNaN(a) || isNaN(b)){
         return;
     }
+
+    const exactValue = exactIntegral(a, b);
+
     if(isNaN(n) || l <= 0){
         n = 1;
         l = 1;
@@ -82,19 +95,15 @@ document.getElementById('createTableBtn').addEventListener('click', function () 
     else if(isNaN(l)){
         l = 1;
     }else{
-        n *= l;
+        let compose = n*l;
     }
     let colums = 7
     if(n == 1){
         colums = 8;
     }
 
-    const exactValue = exactIntegral(a, b);
-
-    var values = [[n, exactValue, integrateUsingQuadrature(a, b, n, leftRectangle, func), integrateUsingQuadrature(a, b, n, rightRectangle, func), integrateUsingQuadrature(a, b, n, midRectangle, func), 
-        integrateUsingQuadrature(a, b, n, trapezoid, func), integrateUsingQuadrature(a, b, n, simpson, func), integrateUsingQuadrature(a, b, n, threeEighths, func)],
-        ['', 0, Math.abs(integrateUsingQuadrature(a, b, n, leftRectangle, func) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, rightRectangle, func) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, midRectangle, func) - exactValue),
-         Math.abs(integrateUsingQuadrature(a, b, n, trapezoid, func) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, simpson, func) - exactValue), Math.abs(integrateUsingQuadrature(a, b, n, threeEighths, func) - exactValue)]]
+    var valtest = [[n, exactValue], ['', 0]];
+    fillArray(a, b, n, func, valtest);
     
     // Создаем элемент таблицы
     var table = document.createElement('table');
@@ -113,7 +122,7 @@ document.getElementById('createTableBtn').addEventListener('click', function () 
 
         for (var j = 1; j <= colums; j++) {
             var td = document.createElement('td');
-            td.textContent = values[i-1][j-1];
+            td.textContent = valtest[i-1][j-1];
             row.appendChild(td);
         }
         tbody.appendChild(row);
