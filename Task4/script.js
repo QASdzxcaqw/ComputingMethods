@@ -4,40 +4,23 @@
 // }
 
 // Функция для вычисления значения производной порядка n методом конечных разностей
-function nthDerivative(f, x, h, n) {
-    if (n === 0) {
-        return f(x);
-    }
-
-    let result = 0;
-    for (let i = 0; i <= n; i++) {
-        result += Math.pow(-1, i) * binomialCoefficient(n, i) * f(x + (n - 2 * i) * h);
-    }
-
-    return result / Math.pow(h, n);
-}
-
-// Функция для вычисления биномиального коэффициента C(n, k)
-function binomialCoefficient(n, k) {
-    if (k === 0 || k === n) {
-        return 1;
-    }
-
-    let result = 1;
-    for (let i = 1; i <= k; i++) {
-        result *= (n - i + 1) / i;
-    }
-
-    return Math.round(result);
+function numericalDerivative(x, func) {
+    const h = 1e-6;
+    return (func(x + h) - func(x - h)) / (2 * h);
 }
 
 // Функция для нахождения максимального значения производной порядка n на заданном отрезке
 function findMaxDerivativeOnInterval(f, a, b, order, h = 0.002) {
 
     let maxDerivative = Number.NEGATIVE_INFINITY;
-
+    let currentDerivative;
     for (let x = a; x <= b; x += h) {
-        const currentDerivative = nthDerivative(f, x, h, order);
+        let tmp = x;
+        for(let i = 0; i < order; i++){
+            currentDerivative = numericalDerivative(tmp, f);
+            tmp = currentDerivative;
+        }
+       
         
         if (currentDerivative > maxDerivative) {
             maxDerivative = currentDerivative;
@@ -121,7 +104,7 @@ function fillRunge(arr1, arr2){
 function fillTheory(arr, a, b, m, f){
     let h = (b-a)/m;
     const cAst = [1/2, 1/2, 1/24, 1/12, 1/2880];
-    var ast = [1, 1, 2, 1, 1];
+    var ast = [1, 1, 2, 2, 3];
     for(let i = 2; i < cAst.length+2; i++){
         arr[2].push(cAst[i-2]*findMaxDerivativeOnInterval(f, a, b, ast[i-2])*(b-a)*(h ** (ast[i-2])));
     }
